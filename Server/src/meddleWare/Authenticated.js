@@ -20,13 +20,14 @@ const IsAuthenticated = (req, res, next) => {
     throw new ApiError(401, "falied to decode token");
   }
 };
-const verifyOTP = asynHandler(async (req, res) => {
-  const { code } = req.body;
+// const verifyOTP = asynHandler(async (req, res) => {
+//   const { code } = req.body;
 
-  if (!code) {
-    throw new ApiError(400, "All fields are required");
-  }
-  next();
-});
+//   if (!code) {
+//     throw new ApiError(400, "All fields are required");
+//   }
+//   next();
+// });
 
-export { IsAuthenticated, verifyOTP };
+// export { IsAuthenticated, verifyOTP };
+export { IsAuthenticated };

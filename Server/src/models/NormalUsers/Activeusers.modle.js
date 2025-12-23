@@ -33,5 +33,3 @@ const UserSchema=new mongoose.Schema({
  const activeusers=mongoose.model("activeusers",UserSchema)
 
  export default activeusers;
-
-

@@ -3,7 +3,7 @@ import UserModel from "../../models/UsersModel/User.Model.js";
 import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
 import bcrypt from "bcrypt";
-import {UserStatus} from '../../../enums.js'
+import {Activestatus,Role} from '../../../enums.js'
 
 const RegisterUser = asynHandler(async (req, res) => {
   const { username, email, password,role } = req.body;
@@ -25,9 +25,9 @@ const RegisterUser = asynHandler(async (req, res) => {
   // const otpExpiry = Date.now() + 10 * 60 * 1000;
   const newUser = {
     username,
-    isverifyed:UserStatus.InActive,
+    isverifyed:Activestatus.InActive,
     email,
-    role,
+    role:Role.User,
     password:hashedPassword,
   };
   const createdUser = await UserModel.create(newUser);
@@ -46,43 +46,6 @@ const RegisterUser = asynHandler(async (req, res) => {
   return res
     .status(201)
     .json(new ApiResponse(201, createdUser, "User Created successfully"));
-});
-
-const otp = Math.floor(100000 + Math.random() * 900000).toString();
-const InactiveToActive = asynHandler(async (req, res) => {
-  const pendingUserId = req.cookies.pendingUserId;
-  const user = await inactiveusers.findById(pendingUserId);
-  if (!user) throw new ApiError(404, "User not found");
-
-  await sendEmail(user.email, otp);
-  return res
-    .status(201)
-    .json(new ApiResponse(201, user, "user created successfully"));
-});
-
-const ActiveRegister = asynHandler(async (req, res) => {
-  const { code } = req.body;
-
-  // const user = await inactiveusers.findOne({ email });
-  const user = await inactiveusers.findById(pendingUserId);
-
-  if (!user) throw new ApiError(404, "User not found");
-
-  if (otp !== code) {
-    throw new ApiError(400, "otp not matched");
-  }
-  const activeUsers = await activeusers.create({
-    username: user.username,
-    email: user.email,
-    password: user.password,
-    status: "active",
-    role: "normalUser",
-  });
-  await inactiveusers.findByIdAndDelete(user._id);
-  res.clearCookie("pendingUserId");
-  return res
-    .status(201)
-    .json(new ApiResponse(201, activeUsers, "user created successfully"));
 });
 
 const Login = asynHandler(async (req, res) => {
@@ -155,5 +118,5 @@ const Login = asynHandler(async (req, res) => {
 //     .json(new ApiResponse(200, user, "Account verified successfully"));
 // });
 
-export { RegisterUser, ActiveRegister, InactiveToActive, Login };
+export { RegisterUser, Login };
 // export { InActiveRegister, ActiveRegister, InactiveToActive, Login, verifyOTP };

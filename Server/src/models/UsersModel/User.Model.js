@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   },
   isverifyed: {
     type: Number,
-    enum: [1, 2],
+    enum: [46,47],
   },
   email: {
     type: String,
@@ -19,7 +19,6 @@ const UserSchema = new mongoose.Schema({
   role: {
     type: Number,
     required: true,
-    enum: [1, 2, 3],
   },
   password: {
     type: String,

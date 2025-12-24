@@ -3,6 +3,8 @@ import { ApiResponse } from "./src/utilities/ApiResponse.js";
 import { ApiError } from "./src/utilities/ApiError.js";
 import UserModel from "./src/models/UsersModel/User.Model.js";
 import jwt from "jsonwebtoken";
+import cloudinary from "./src/utilities/cloudinary.js";
+
 // const db_name = "E-shops";
 const verifyJWT = async (req, res, next) => {
   console.log("object");
@@ -43,16 +45,6 @@ const chekRole = (...allowedRoles) => {
   return (req, res, next) => {
     console.log(req.user, "chek role");
     const userRole = req.user.role;
-
-    if (req.method === "DELETE") {
-      if (userRole !== Role.SuperAdmin) {
-        return res.status(403).json({
-          success: false,
-          message: "Only SuperAdmin can delete data",
-        });
-      }
-      return next();
-    }
     // set metod from fronteend
     //     fetch("http://localhost:5000/products/delete/123", {
     //   method: "DELETE",
@@ -64,7 +56,7 @@ const chekRole = (...allowedRoles) => {
     //     withCredentials: true, // 👈 VERY IMPORTANT
     //   }
     // );
-    if (userRole === Role.SuperAdmin) {
+    if (userRole === Role.Admin) {
       return next();
     }
 
@@ -79,5 +71,22 @@ const chekRole = (...allowedRoles) => {
   };
 };
 
+  const uploadToCloudinary = (file, folder = "uploads") => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        {
+          folder,
+          resource_type: "auto",
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result.secure_url);
+        }
+      )
+      .end(file.buffer);
+  });
+};
+
 // export { db_name, isSuperAdmin };
-export { chekRole, verifyJWT };
+export { chekRole, verifyJWT,uploadToCloudinary };

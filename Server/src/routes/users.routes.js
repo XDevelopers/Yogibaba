@@ -1,10 +1,7 @@
 import { Router } from "express";
 import { Role } from "../../enums.js";
-import {
-  Login,
-} from "../controllers/User/regester.controller.js";
+import { Login,RegisterUser } from "../controllers/User/regester.controller.js";
 import { IsAuthenticated } from "../meddleWare/Authenticated.js";
-import { RegisterUser } from "../controllers/User/regester.controller.js";
 // import {isSuperAdmin} from '../../contrains.js'
 import { chekRole } from "../../contrains.js";
 const Userrouter = Router();
@@ -15,14 +12,14 @@ const Userrouter = Router();
 // router.route("/otpValidation").post(IsAuthenticated, verif);
 // router.route("/changeusertypeadmin").post(Login);
 // router.route("/logout").post(logoutUser)
-Userrouter.route("/register").post(registerUser);
-Userrouter.route("/login").post(login);
-Userrouter.route("/viewProducts").get(viewProducts);
-Userrouter.route("/viewBlogs").get(viewBlogs);
-Userrouter.route("/placeOrder").post(placeOrder);
-Userrouter.route("/orderSummary").post(orderSummary);
-Userrouter.route("/addToCart").post(addToCart);
-Userrouter.route("/removeFromCart").post(removeFromCart);
 
+Userrouter.route("/register").post(RegisterUser);
+Userrouter.route("/login").post(Login);
+// Userrouter.route("/viewProducts").get(viewProducts);
+// Userrouter.route("/viewBlogs").get(viewBlogs);
+// Userrouter.route("/placeOrder").post(placeOrder);
+// Userrouter.route("/orderSummary").post(orderSummary);
+// Userrouter.route("/addToCart").post(addToCart);
+// Userrouter.route("/removeFromCart").post(removeFromCart);
 
 export default Userrouter;

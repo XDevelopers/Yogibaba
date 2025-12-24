@@ -1,4 +1,3 @@
-import normalusers from "../models/NormalUsers/InActiveusers.modle.js";
 import { ApiError } from "../utilities/ApiError.js";
 import asynHandler from "../utilities/AsyncHandler.js";
 const IsAuthenticated = (req, res, next) => {

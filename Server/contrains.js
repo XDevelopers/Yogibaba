@@ -84,7 +84,7 @@ const chekRole = (...allowedRoles) => {
           resolve(result.secure_url);
         }
       )
-      .end(file.buffer);
+      .end(file.buffer);//gpt mar wo karke dega dekhte 
   });
 };
 

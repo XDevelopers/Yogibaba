@@ -1,41 +1,40 @@
-import ProductModel from "../../models/ProductModel/Product.Model.js";
+import BlogModel from "../../models/BlogModel/Blog.Model.js";
 import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
 import asyncHandler from "../../utilities/AsyncHandler.js";
 import { Activestatus } from "../../../enums.js";
 import { uploadToCloudinary } from "../../../contrains.js";
-const addProduct = asyncHandler(async (req, res) => {
+const addBlog = asyncHandler(async (req, res) => {
   console.log(req.body,req.file, "addprodut");
   try {
-    const { itemname, description } = req.body;
+    const { description ,header} = req.body;
       if (!req.file) {
-      throw new ApiError(400, "Product image is required");
+      throw new ApiError(400, "Blog image is required");
     }
-    const imageUrl = await uploadToCloudinary(req.file, "products");
+    const imageUrl = await uploadToCloudinary(req.file, "blog");
     // 1️⃣ Validate input
     console.log(imageUrl, "cgh");
   
     if (!imageUrl) {
       return res.status(404).json(new ApiError(400, imageUrl, "Multer Error"));
     }
-    if (!itemname  || !description) {
+    if ( !description||!header) {
       throw new ApiError(400, "All fields are required");
     }
     console.log(req.user, req.body, "productx");
 
-  
-    const product = await ProductModel.create({
-      itemname,
-      itemimg: imageUrl,
+    // 2️⃣ Create product
+   
+    const product = await BlogModel.create({
+      header,
+      blogImgUrl: imageUrl,
       description,
       status: Activestatus.Active,
       createdby: req.user.userid, // comes from verifyJWT middleware
     });
-
-    // 3️⃣ Response
     return res
       .status(201)
-      .json(new ApiResponse(201, product, "Product added successfully"));
+      .json(new ApiResponse(201, product, "Blog added successfully"));
   } catch (error) {
      return res
       .status(error.statusCode || 400)
@@ -48,12 +47,11 @@ const addProduct = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteProduct=asyncHandler(async(req,res)=>{
+const deleteBlog=asyncHandler(async(req,res)=>{
   //id se find nhi krege kr skte hi but nhi krege
-    const pid= req.query.pid;
-    const product=await ProductModel.findOne({productid:pid});//done
-    // console.log(object);
-    console.log(product , pid,'edrftgh');
+    const bid= req.query.bid;
+    const product=await BlogModel.findOne({blogId:bid});//done
+    console.log(product , bid,'edrftgh');
     if(!product){
         throw new ApiError(400,product,"Product not found");
     }
@@ -64,4 +62,5 @@ const deleteProduct=asyncHandler(async(req,res)=>{
     return res.status(200).json(new ApiResponse(200,product,"Deleted"));
 })
 
-export { addProduct, deleteProduct };
+export { addBlog, deleteBlog };
+//ruk 5m

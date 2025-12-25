@@ -17,7 +17,7 @@ const ProductSchema = new mongoose.Schema(
     status: {
       type: Number,
       required: true,
-      enum: [1, 2, 3],
+      enum: [46,47],
     },
     createdby: {
       type: Number,

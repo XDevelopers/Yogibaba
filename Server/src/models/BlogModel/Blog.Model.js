@@ -17,14 +17,14 @@ const BlogSchema = new mongoose.Schema(
     status: {
       type: Number,
       required: true,
-      enum: [1, 2],
+      enum: [46, 47],
     },
     createdby: {
       type: Number,
       required: true,
     },
-    lickedby: {
-      type: Array,
+    blogId: {
+      type: Number,
     },
   },
   { timestamps: true }
@@ -34,17 +34,17 @@ const CounterSchema = new mongoose.Schema({
   seq: { type: Number, default: 0 },
 });
 
-const Counter = mongoose.model("ProductCounter", CounterSchema);
-ProductSchema.pre("save", async function (next) {
+const Counter = mongoose.model("BlogCounter", CounterSchema);
+BlogSchema.pre("save", async function (next) {
   if (!this.isNew) return next();
 
   const counter = await Counter.findOneAndUpdate(
-    { id: "productid" }, // ✅ counter name
+    { id: "blogId" }, // ✅ counter name
     { $inc: { seq: 1 } },
     { new: true, upsert: true }
   );
 
-  this.productid = counter.seq;
+  this.blogId = counter.seq;
   next();
 });
 

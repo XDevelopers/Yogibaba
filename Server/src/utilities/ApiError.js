@@ -3,8 +3,8 @@ class ApiError extends Error {
     super(message);
 
     this.statusCode = statusCode;
-    this.error = error;
-    this.message = message;
+    this.error = error ||" unExpected Error";
+    this.message = message || "unexpect  Message";
 
     // Capture stack trace if not provided
     if (stack) {
